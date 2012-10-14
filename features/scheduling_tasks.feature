@@ -7,3 +7,8 @@ Feature: scheduling tasks
     Given an empty task database
     When I create a task "Implement the first feature"
     Then I should see the task "Implement the first feature" in the task list
+
+  Scenario: Creating a user
+    Given an empty task database
+    When I create a user "Tim"
+    Then I should see the user "Tim" in the user list

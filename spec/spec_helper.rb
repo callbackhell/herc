@@ -4,5 +4,6 @@ RSpec.configure do |config|
   config.before {
     r = Redis.new
     r.del('tasks')
+    r.del('users')
   }
 end
