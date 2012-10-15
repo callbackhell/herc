@@ -20,7 +20,7 @@ describe Herc::Runner do
       task1 = Herc::Task.new("Make the test pass")
       task2 = Herc::Task.new("Then refactor")
       Herc::Task.stubs(:all).returns([task1,task2])
-      output =" - Make the test pass\n - Then refactor"
+      output ="1 - Make the test pass\n2 - Then refactor"
       Herc::Runner.expects(:puts).with(output)
       Herc::Runner.run('list_tasks')
     end

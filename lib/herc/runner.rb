@@ -6,7 +6,7 @@ module Herc::Runner
         task = Herc::Task.new(args[0])
         task.save
       when 'list_tasks'
-        puts Herc::Task.all.map {|t| " - #{t.description}"}.join("\n")
+        puts Herc::Task.all.each.with_index.map {|t, i| "#{i+1} - #{t.description}"}.join("\n")
       when 'create_user'
         user = Herc::User.new(args[0])
         user.save
