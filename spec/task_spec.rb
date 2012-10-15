@@ -29,16 +29,16 @@ describe Herc::Task do
     t1.hash.should == t2.hash
   end
 
-  it "maintains a list of all saved tasks" do
+  it "maintains a list of all saved and unassigned tasks" do
     description1 = "Make the test pass"
     description2 = "Then refactor"
     task1 = Herc::Task.new(description1)
     task2 = Herc::Task.new(description2)
-    Herc::Task.all.should == []
+    Herc::Task.unassigned.should == []
     task1.save
-    Herc::Task.all.should == [task1]
+    Herc::Task.unassigned.should == [task1]
     task2.save
-    Herc::Task.all.should == [task1, task2]
+    Herc::Task.unassigned.should == [task1, task2]
   end
 
   it "persists the tasks list in redis" do

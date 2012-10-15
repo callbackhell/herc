@@ -5,7 +5,7 @@ require 'redis'
 
 class Herc::Task
   class << self
-    def all
+    def unassigned
       redis.lrange('tasks',0, -1).map {|h| self.from_json(h) }
     end
 

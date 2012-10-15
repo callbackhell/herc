@@ -58,4 +58,44 @@ describe Herc::User do
     Redis.stubs(:new).returns(redis)
     Herc::User.all.should == results
   end
+
+  it "retrieves users by name from redis" do
+    user = Herc::User.new("Tim")
+    redis = mock
+    redis.expects(:hget).with('users', 'Tim').returns(user.to_json)
+    Redis.stubs(:new).returns(redis)
+    Herc::User.by_name("Tim").should == user
+  end
+
+  it "returns nil when retrieving users by name, if a user with the given name does not exist" do
+    redis = mock
+    redis.expects(:hget).with('users', 'Tim').returns(nil)
+    Redis.stubs(:new).returns(redis)
+    Herc::User.by_name("Tim").should be_nil
+  end
+
+  it "has a list of assigned tasks" do
+    user = Herc::User.new("Tim")
+    task = Herc::Task.new("Write some really bad software")
+    user.assign_task(task)
+    user.tasks.should include(task)
+  end
+
+  it "persists the users task list in redis" do
+    redis = mock
+    Redis.stubs(:new).returns(redis)
+    user = Herc::User.new("Tim")
+    task = Herc::Task.new("Write some really bad software")
+    redis.expects(:rpush).with('tasks_Tim', task.to_json)
+    user.assign_task(task)
+  end
+
+  it "retrieves the users task list from redis" do
+    redis = mock
+    Redis.stubs(:new).returns(redis)
+    user = Herc::User.new("Tim")
+    task = Herc::Task.new("Write some really bad software")
+    redis.expects(:lrange).with('tasks_Tim', 0, -1).returns([task.to_json])
+    user.tasks
+  end
 end
